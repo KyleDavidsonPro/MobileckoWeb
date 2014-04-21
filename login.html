@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<!-- Bootstrap for pretty front end styles-->
+	<link href="css/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<!-- Parse -->
+	<script src="http://www.parsecdn.com/js/parse-1.2.13.min.js"></script>
+
+	<script>
+		Parse.initialize("ZJXP9PAIaXLxa5pNA8f7jMTuU6fKDYal0AZs6oIS", "rcOvCIpUtAUsy7Wqpea1NkKKWqoDOAdLMH8keFIM");
+		
+		function createAccount() {
+			var form = document.forms['regForm'];
+			var username = form['newUsername'].value;
+			var password = form['newPassword'].value;
+			var email = form['newEmail'].value;
+			var validForm = true;
+			
+			if (validateValue(username) && validateValue(password) && validateValue(email)) {
+				//create the account
+				var user = new Parse.User();
+				user.set("username", username);
+				user.set("password", password);
+				user.set("email", email);
+				 
+				user.signUp(null, {
+				  success: function(user) {
+						document.getElementById('notification').innerHTML = "<div class='alert alert-success'>Account succesfully created</div>";
+						document.location.href = 'index.html'
+				  },
+				  error: function(user, error) {
+						document.getElementById('notification').innerHTML = "<div class='alert alert-danger'>Registration Failed: "+error.message+"</div>";
+				  }
+				});
+			} else {
+				document.getElementById('notification').innerHTML = "<div class='alert alert-warning'>You need to provide all field values</div>";
+			}
+			return false;
+		}
+		
+		function login() {
+			var form = document.forms['loginForm'];
+			var username = form['username'].value;
+			var password = form['password'].value;
+			if (validateValue(username) && validateValue(password)) {
+				Parse.User.logIn(username, password, {
+				  success: function(user) {
+					document.location.href = 'index.html'
+				  },
+				  error: function(user, error) {
+					document.getElementById('notification').innerHTML = "<div class='alert alert-danger'>Login Failed: "+error.message+"</div>";
+				  }
+				});
+			
+			}
+			return false;
+		}
+		
+		function validateValue(value) {
+			if (value == '') {
+				return false;
+			}
+			return true;
+		}
+	</script>
+  </head>
+  <body>
+		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Mobilecko</a>
+				</div>
+				<div class="navbar-collapse collapse">
+					<form role="form" method='post' name='loginForm' id='loginForm' onsubmit='return login();' class="navbar-form navbar-right">
+						<div class="form-group">
+							<input type="text" name="username" id='username' placeholder="Username" class="form-control">
+						</div>
+						<div class="form-group">
+							<input type="password" name="password" id='password' placeholder="Password" class="form-control">
+						</div>
+						<button type="submit" class="btn btn-success">Sign in</button>
+					</form>
+				</div><!--/.navbar-collapse -->
+			</div><!--/.Container -->
+		</div>
+
+		<!-- Main jumbotron for a primary marketing message or call to action -->
+		<div class="jumbotron">
+			<div class="container">
+				<h1>Welcome to Mobilecko</h1>
+				<p>Sign in above or create an account below</p>
+				<div id="notification"></div>
+			</div>
+		</div>
+		
+		<!-- Create account form -->
+		<div class="container">
+			<form id='regForm' name='regForm' class="form" method='post' onsubmit='return createAccount();' role="form">
+				<div class="form-group">
+					<label for="newUsername" >Username:</label>
+					<input type="text" name="newUsername" class="form-control" id="newUsername" placeholder="Username" maxlength="30">
+				</div>
+				<div class="form-group">
+					<label for="newPassword" >Password:</label>
+					<input type="password" name="newPassword" class="form-control" id="newPassword" placeholder="Password" maxlength="30">
+				</div>
+				<div class="form-group">
+					<label for="newPassword" >Email Address:</label>
+					<input type="text" name="newEmail" class="form-control" id="newEmail" placeholder="Email" maxlength="40">
+				</div>
+				<button type="submit" class="btn btn-primary">Create account</button>
+			</form>
+		</div>
+	</body>
+</html>
