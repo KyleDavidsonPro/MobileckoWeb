@@ -40,15 +40,8 @@ function updateMarkers() {
 	query.find({
 		success: function(results) {
 			var parseMarkers = results;
-			var lat;
-			var lng;
-			if (parseMarkers.length > 0) {
-				lat = parseMarkers[0].get("geoLocation").latitude;
-				lng = parseMarkers[0].get("geoLocation").longitude;
-			} else {
-				lat = 12;
-				lng = 12;
-			}
+			var lat = 10;
+			var lng = 10;
 			
 			for (var i = 0; i < parseMarkers.length; i++) {
 				lat = parseMarkers[i].get("geoLocation").latitude;
